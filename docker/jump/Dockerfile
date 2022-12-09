@@ -2,7 +2,7 @@ FROM	debian-base
 
 RUN useradd -ms /bin/false jump \
 	&& mkdir /home/jump/.ssh \
-	&& chmod 700 /home/jump/.shh
+	&& chmod 700 /home/jump/.ssh
 COPY	authorized_keys /home/jump/.ssh/authorized_keys
 RUN	chown jump:jump -R /home/jump
 
