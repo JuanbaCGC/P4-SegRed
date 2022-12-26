@@ -13,6 +13,7 @@ RUN apt-get update && \
 	rsyslog \
 	curl \
 	sudo \
+	make \
 	&& \
     apt-get clean
 
