@@ -13,6 +13,10 @@ ip route add default via 10.0.1.2 dev eth0
 service ssh start
 service rsyslog start
 
+cd /home/api
+make install
+make api
+
 if [ -z "$@" ]; then
     exec /bin/bash
 else
