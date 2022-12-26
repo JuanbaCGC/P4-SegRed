@@ -1,3 +1,8 @@
+key:
+	ssh-keygen -t rsa
+	cat /home/kali/.ssh/id_rsa.pub > docker/assets/authorized_keys.op
+	cat /home/kali/.ssh/id_rsa.pub > docker/jump/authorized_keys
+
 build:
 	docker build --rm -f docker/Dockerfile --tag midebian docker/
 	docker build --rm -f docker/router/Dockerfile --tag midebian-router docker/router
