@@ -1,4 +1,4 @@
-FROM	debian-base
+FROM midebian
 
-COPY	entrypoint.sh /entrypoint.sh
-ENTRYPOINT	["/bin/bash", "/entrypoint.sh"]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT /entrypoint.sh
