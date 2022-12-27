@@ -13,6 +13,8 @@ ip route add default via 10.0.2.2 dev eth0
 service ssh start
 service rsyslog start
 
+./home/api/apiFile.py
+
 if [ -z "$@" ]; then
     exec /bin/bash
 else

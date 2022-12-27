@@ -1,4 +1,15 @@
 FROM midebian
 
+RUN apt-get update && \
+    apt-get install -y \
+    python3 \
+    make \
+    python3-pip
+
+RUN pip install flask flask-restful
+
 COPY entrypoint.sh /entrypoint.sh
+COPY apiFile.py /home/api/apiFile.py
+COPY http_status_codes.py /home/api/http_status_codes.py
+
 ENTRYPOINT /entrypoint.sh
