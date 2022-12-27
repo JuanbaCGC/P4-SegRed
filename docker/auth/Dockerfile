@@ -6,7 +6,7 @@ RUN apt-get update && \
     make \
     python3-pip
 
-RUN pip install flask flask-restful flask-limiter
+RUN pip install flask flask-restful flask-limiter requests
 
 COPY entrypoint.sh /entrypoint.sh
 COPY apiAuth.py /home/api/apiAuth.py

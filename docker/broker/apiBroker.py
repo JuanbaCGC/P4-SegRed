@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request
 import os
 from flask_restful import Api
 import sys
+import requests
 import json
 import uuid
 import hashlib
@@ -59,8 +60,17 @@ def getVersion():
 @app.route('/signup', methods=['POST'])
 @limiter.limit("30 per minute", key_func = lambda : getUsername())
 def signup():
-    
-    return 0
+    try:
+        parameters = request.get_json(force=True)
+    except KeyError:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+    except BadRequest:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+
+    headers = request.headers.get('Authorization')
+    respuesta = requests.post('http://10.0.2.3:5000/signup', json=parameters, headers=headers)
+
+    return respuesta.json()
 
 #/LOGIN
 @app.route('/login', methods=['POST'])
@@ -102,5 +112,5 @@ def get_all_docs(username):
     return 0
 
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context=("cert.pem", "key.pem"), port=5000)
+    app.run(host="0.0.0.0", port=5000)
     app.teardown_appcontext(clearTokens())

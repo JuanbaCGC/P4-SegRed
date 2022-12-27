@@ -1,11 +1,13 @@
 #!/bin/bash
 
-iptables -P INPUT DROP
-iptables -P FORWARD DROP
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A INPUT -p icmp -j ACCEPT
+
+iptables -A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 ip route del default
 ip route add default via 10.0.1.2 dev eth0 

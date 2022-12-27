@@ -3,6 +3,8 @@
 from flask import Flask, jsonify, request
 import os
 from flask_restful import Api
+import sys
+import requests
 import json
 import uuid
 import hashlib
@@ -12,7 +14,7 @@ from werkzeug.exceptions import BadRequest
 from flask_limiter import Limiter
 from pathlib import Path
 from flask_limiter.util import get_remote_address
-from http_status_codes import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 app = Flask(__name__)
 api = Api(app)
@@ -24,6 +26,9 @@ limiter = Limiter(
     )
 
 UserList=[]
+
+if os.path.isdir(root) is False:
+    os.mkdir(root)
 
 #Read users.json
 users_json = json.load(open('users.json'))
@@ -186,5 +191,5 @@ def login():
         return jsonify({'error': "Incorrect username or password."}), HTTP_403_FORBIDDEN
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host="0.0.0.0", port=5000)
     app.teardown_appcontext(clearTokens())
