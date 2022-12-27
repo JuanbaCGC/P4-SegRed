@@ -76,8 +76,17 @@ def signup():
 @app.route('/login', methods=['POST'])
 @limiter.limit("30 per minute", key_func = lambda : getUsername())
 def login():
-    
-    return 0
+    try:
+        parameters = request.get_json(force=True)
+    except KeyError:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+    except BadRequest:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+
+    headers = request.headers.get('Authorization')
+    respuesta = requests.post('http://10.0.2.3:5000/login', json=parameters, headers=headers)
+
+    return respuesta.json()
 
 #GET DOCUMENT
 #/<string:username>/<string:doc_id>
