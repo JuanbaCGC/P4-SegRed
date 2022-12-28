@@ -162,7 +162,7 @@ def get_all_docs(username):
     else:
         return respuesta_json
 
-#GET ALL DOCS
+#GET FOLDER
 #/<string:username>/get_folder
 @app.route('/<string:username>/get_folder' , methods=['GET'])
 def get_folder(username):

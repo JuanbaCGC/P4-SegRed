@@ -69,7 +69,7 @@ def signup():
 
     headers = request.headers.get('Authorization')
     respuesta = requests.post('http://10.0.2.3:5000/signup', json=parameters, headers=headers)
-
+    #respuesta = requests.post('http://10.0.1.2:5000/signup', json=parameters, headers=headers)
     return respuesta.json()
 
 #/LOGIN

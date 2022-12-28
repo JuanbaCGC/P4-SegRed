@@ -2,7 +2,7 @@
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-iptables -P INPUT ACCEPT
+iptables -P INPUT DROP
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 
@@ -24,6 +24,17 @@ iptables -A FORWARD -i eth2 -o eth1 -p tcp --dport 22 -j ACCEPT
 iptables -A FORWARD -i eth1 -o eth2 -p tcp --sport 22 -j ACCEPT
 
 iptables -A INPUT -p tcp --dport 22 -i eth2 -s 10.0.3.3 -j ACCEPT
+
+# Aceptar http del broker
+iptables -A INPUT -p tcp --sport 5000 -s 10.0.1.4 -j ACCEPT
+iptables -A FORWARD -s 10.0.1.4 -d 10.0.2.0/24 -j ACCEPT
+
+
+iptables -A INPUT -p tcp --sport 5000 -s 10.0.2.3 -j ACCEPT
+
+# #Redirigir las peticiones del broker al auth
+# iptables -t nat -A PREROUTING -p tcp -s 10.0.1.4 --sport 5000 -j DNAT --to-destination 10.0.2.0/24
+# iptables -t nat -A POSTROUTING -p tcp --dport 5000 -s 10.0.1.4 -d 10.0.2.0/24 -j SNAT --to-source 10.0.1.4
 
 service ssh start
 service rsyslog start
