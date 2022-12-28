@@ -24,19 +24,14 @@ if os.path.isdir(root) is False:
 @app.route('/<string:username>/<string:doc_id>', methods=['GET'])
 def get(username, doc_id):
     try:
-        parameters = request.get_json(force=True)
-        header = {"Authorization":request.headers.get('Authorization')}
+        header =  {"Authorization": request.headers.get('Authorization')}
     except KeyError:
-        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
-    except BadRequest:
-        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+        return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
 
-    #validate = verifyHeader(username)
-    # Request para el auth
-    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
-    print(respuesta.json())
-
-    if respuesta:
+    # Verificamos la cabecera y el token
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', headers=header)
+    respuesta_json = respuesta.json()
+    if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
         if doc_id+".json" not in documents_list:
             return jsonify({'error': "You don't have any document with this name."}), HTTP_404_NOT_FOUND
@@ -44,16 +39,7 @@ def get(username, doc_id):
             file = open(root+"/"+username+"/"+doc_id+".json", "r")
             return jsonify(json.load(file)), HTTP_200_OK
     else:
-        return jsonify({'error': "Incorrect header."}), HTTP_400_BAD_REQUEST
-    # if(validate[0] == True):
-    #     documents_list = os.listdir(root+"/"+username)
-    #     if doc_id+".json" not in documents_list:
-    #         return jsonify({'error': "You don't have any document with this name."}), HTTP_404_NOT_FOUND
-    #     else:
-    #         file = open(root+"/"+username+"/"+doc_id+".json", "r")
-    #         return jsonify(json.load(file)), HTTP_200_OK
-    # else:
-    #     return validate
+        return respuesta_json
 
 #POST DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['POST'])
