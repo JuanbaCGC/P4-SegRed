@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask, jsonify, request
-import os
 from flask_restful import Api
-import sys
 import requests
 import json
 import uuid
@@ -14,7 +12,7 @@ from werkzeug.exceptions import BadRequest
 from flask_limiter import Limiter
 from pathlib import Path
 from flask_limiter.util import get_remote_address
-from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 
 app = Flask(__name__)
 api = Api(app)
@@ -26,9 +24,6 @@ limiter = Limiter(
     )
 
 UserList=[]
-
-if os.path.isdir(root) is False:
-    os.mkdir(root)
 
 #Read users.json
 users_json = json.load(open('users.json'))
@@ -165,8 +160,6 @@ def signup():
         data = read('users.json')
         data.append(newUser)
         write('users.json', data)
-        if os.path.isdir(root+"/"+request.json['username']) is False:
-            os.mkdir(root+"/"+request.json['username'])
         token = secrets.token_urlsafe(20)
         writeToken(token,request.json['username'])
         requests.get(f'http://10.0.2.4:5000/{name}/get_folder')

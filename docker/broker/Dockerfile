@@ -9,7 +9,7 @@ RUN apt-get update && \
 RUN pip install flask flask-restful flask-limiter requests
 
 COPY entrypoint.sh /entrypoint.sh
-COPY apiBroker.py /home/api/apiBroker.py
-COPY http_status_codes.py /home/api/http_status_codes.py
+COPY apiBroker.py /apiBroker.py
+COPY http_status_codes.py /http_status_codes.py
 
 ENTRYPOINT /entrypoint.sh

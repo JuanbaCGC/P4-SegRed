@@ -2,9 +2,9 @@
 
 from flask import Flask, jsonify, request
 import os
-import requests
 from flask_restful import Api
 import sys
+import requests
 import json
 from werkzeug.exceptions import BadRequest
 from pathlib import Path
@@ -155,7 +155,7 @@ def get_all_docs(username):
                 documents_found={}
                 for filename in os.listdir(root+"/"+username):
                     file = open(root+"/"+username+"/"+filename, "r")
-                    documents_found[filename] = json.load(file)
+                    documents_found[filename[:-5]] = json.load(file)
                 return jsonify(documents_found), HTTP_200_OK 
         else:
             return jsonify({'error': "This username does not exist."}), HTTP_404_NOT_FOUND
