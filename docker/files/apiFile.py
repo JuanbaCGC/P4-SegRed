@@ -88,7 +88,7 @@ def put(username, doc_id):
         return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
     except BadRequest:
         return jsonify({'error': "Introduce the Authorization header and the username"}), HTTP_400_BAD_REQUEST
-        
+
     # Verificamos la cabecera y el token
     respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
     respuesta_json = respuesta.json()
@@ -117,9 +117,15 @@ def put(username, doc_id):
 #DELETE DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['DELETE'])
 def delete(username, doc_id):
-    #validate = verifyHeader(username)
-    validate = 0
-    if(validate[0] == True):
+    try:
+        header =  {"Authorization": request.headers.get('Authorization')}
+    except KeyError:
+        return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
+
+    # Verificamos la cabecera y el token
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', headers=header)
+    respuesta_json = respuesta.json()
+    if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
         if doc_id+".json" not in documents_list:
             return jsonify({'error': "The document "+doc_id+" does not exist! Try again with other document."}), HTTP_404_NOT_FOUND
@@ -127,7 +133,7 @@ def delete(username, doc_id):
             os.remove(root+"/"+username+"/"+doc_id+".json")
         return jsonify({}), HTTP_200_OK 
     else:
-        return validate
+        return respuesta_json
 
 #GET ALL DOCS
 #/<string:username>/_all_docs

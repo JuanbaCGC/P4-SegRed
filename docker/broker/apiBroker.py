@@ -132,7 +132,10 @@ def put(username, doc_id):
 @app.route('/<string:username>/<string:doc_id>', methods=['DELETE'])
 def delete(username, doc_id):
     
-    return 0
+    headers = {"Authorization":request.headers.get('Authorization')}
+    respuesta = requests.delete(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
+
+    return respuesta.json()
 
 #GET ALL DOCS
 #/<string:username>/_all_docs
