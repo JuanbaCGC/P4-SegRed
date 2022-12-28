@@ -116,8 +116,17 @@ def post(username,doc_id):
 #PUT DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['PUT'])
 def put(username, doc_id):
-    
-    return 0
+    try:
+        parameters = request.get_json(force=True)
+    except KeyError:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+    except BadRequest:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+
+    headers = {"Authorization": request.headers.get('Authorization')}
+    # Request para el files
+    respuesta = requests.put(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+    return respuesta.json()
 
 #DELETE DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['DELETE'])

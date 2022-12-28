@@ -81,9 +81,18 @@ def post(username,doc_id):
 #PUT DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['PUT'])
 def put(username, doc_id):
-    #validate = verifyHeader(username)
-    validate = 0
-    if(validate[0] == True):
+    try:
+        parameters = request.get_json(force=True)
+        header =  {"Authorization": request.headers.get('Authorization')}
+    except KeyError:
+        return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
+    except BadRequest:
+        return jsonify({'error': "Introduce the Authorization header and the username"}), HTTP_400_BAD_REQUEST
+        
+    # Verificamos la cabecera y el token
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
+    respuesta_json = respuesta.json()
+    if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
         if doc_id+".json" not in documents_list:
             return jsonify({'error': "The document "+doc_id+" does not exist! Try again with other document."}), HTTP_404_NOT_FOUND
@@ -103,7 +112,7 @@ def put(username, doc_id):
             size = sys.getsizeof(str(content))
             return jsonify({"size": size}), HTTP_201_CREATED 
     else:
-        return validate
+        return respuesta_json
 
 #DELETE DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['DELETE'])
