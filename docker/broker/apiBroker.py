@@ -142,7 +142,10 @@ def delete(username, doc_id):
 @app.route('/<string:username>/_all_docs' , methods=['GET'])
 def get_all_docs(username):
     
-    return 0
+    headers = {"Authorization":request.headers.get('Authorization')}
+    respuesta = requests.get(f'http://10.0.2.4:5000/{username}/_all_docs', headers=headers)
+
+    return respuesta.json()
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

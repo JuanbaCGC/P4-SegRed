@@ -139,9 +139,15 @@ def delete(username, doc_id):
 #/<string:username>/_all_docs
 @app.route('/<string:username>/_all_docs' , methods=['GET'])
 def get_all_docs(username):
-    validate = 0
-    #validate = verifyHeader(username)
-    if(validate[0] == True):
+    try:
+        header =  {"Authorization": request.headers.get('Authorization')}
+    except KeyError:
+        return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
+
+    # Verificamos la cabecera y el token
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', headers=header)
+    respuesta_json = respuesta.json()
+    if 'Correct' in respuesta_json:
         if os.path.exists(root+"/"+username):
             if len(os.listdir(root+"/"+username)) == 0:
                 return jsonify({'error': "You don't have any document."}), HTTP_404_NOT_FOUND
@@ -154,7 +160,7 @@ def get_all_docs(username):
         else:
             return jsonify({'error': "This username does not exist."}), HTTP_404_NOT_FOUND
     else:
-        return validate
+        return respuesta_json
 
 #GET ALL DOCS
 #/<string:username>/get_folder
