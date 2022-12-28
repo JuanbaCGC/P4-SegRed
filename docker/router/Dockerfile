@@ -9,4 +9,5 @@ RUN apt-get update && \
 RUN pip install requests
 
 COPY entrypoint.sh /entrypoint.sh
+COPY test.py /test.py
 ENTRYPOINT /entrypoint.sh
