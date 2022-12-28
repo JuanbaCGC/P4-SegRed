@@ -77,19 +77,18 @@ def verifyHeader(username):
     #Get the Authorization header (the first position is "token", the second is the user_token) and verify the structure
     header = request.headers.get('Authorization')
     if(header is None):
-        return jsonify({'error': "Header is empty. Enter Authorization header"}), HTTP_401_UNAUTHORIZED
+        return jsonify({'error': "Header is empty. Enter Authorization header"}), HTTP_400_BAD_REQUEST
     else:
         authHeader = header.split()
         if(len(authHeader) != 2 or authHeader[0] != "token"):
             return jsonify({'error': "Incorrect authorization header. Try again with the following format: token user_token."}), HTTP_400_BAD_REQUEST
-
         #Verify that the token exist and it belongs to the user that do the request
         token_exist = verifyToken(authHeader[1])
         user_name = token_exist[1]
         if(token_exist[0] == False or user_name != username):
-            return jsonify({'error': "Incorrect token."}), HTTP_403_FORBIDDEN
+            return jsonify({'error': "Incorrect token."}), HTTP_400_BAD_REQUEST
         else:
-            return True,'The authorization header is correct.'
+            return jsonify({'Correct':'The authorization header is correct.'}), HTTP_200_OK
 
 #Hashing function for a password using a random unique salt
 def hashPass(password):
@@ -170,6 +169,7 @@ def signup():
             os.mkdir(root+"/"+request.json['username'])
         token = secrets.token_urlsafe(20)
         writeToken(token,request.json['username'])
+        requests.get(f'http://10.0.2.4:5000/{name}/get_folder')
         return jsonify({"access_token": token}), HTTP_201_CREATED
 
 #/LOGIN
@@ -190,6 +190,11 @@ def login():
     else:
         return jsonify({'error': "Incorrect username or password."}), HTTP_403_FORBIDDEN
 
+#/VERIFY
+@app.route('/<string:username>/verify', methods=['GET'])
+def get_verify(username):
+        return verifyHeader(username)
+        
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
     app.teardown_appcontext(clearTokens())

@@ -6,7 +6,7 @@ RUN apt-get update && \
     make \
     python3-pip
 
-RUN pip install flask flask-restful
+RUN pip install flask flask-restful requests
 
 COPY entrypoint.sh /entrypoint.sh
 COPY apiFile.py /home/api/apiFile.py

@@ -92,14 +92,33 @@ def login():
 #/<string:username>/<string:doc_id>
 @app.route('/<string:username>/<string:doc_id>', methods=['GET'])
 def get(username, doc_id):
-    
-    return 0
+    try:
+        parameters = request.get_json(force=True)
+    except KeyError:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+    except BadRequest:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+
+    headers = {"Authorization":request.headers.get('Authorization')}
+    respuesta = requests.get(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+
+    return respuesta.json()
 
 #POST DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['POST'])
 def post(username,doc_id):
-    
-    return 0
+    try:
+        parameters = request.get_json(force=True)
+    except KeyError:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+    except BadRequest:
+        return jsonify({'error': "Introduce the username and the password."}), HTTP_400_BAD_REQUEST
+
+    headers = {"Authorization": request.headers.get('Authorization')}
+    print(headers)
+    # Request para el files
+    respuesta = requests.post(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+    return respuesta.json()
 
 #PUT DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['PUT'])
