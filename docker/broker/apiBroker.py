@@ -18,15 +18,6 @@ limiter = Limiter(
         default_limits=["30 per minute"]
     )
 
-# Method that write in the input filename
-def write(filename, content):
-    with open(filename, "w") as file:
-        json.dump(content, file, indent=4)
-
-# Method to clear the tokens.json
-def clearTokens():
-    write('tokens.json', [])
-
 # Method to get the identification of the user in order to count her requests
 def getUsername():
     try:
@@ -101,4 +92,3 @@ def get_all_docs(username):
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
-    app.teardown_appcontext(clearTokens())
