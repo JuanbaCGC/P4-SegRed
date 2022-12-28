@@ -168,7 +168,7 @@ def get_all_docs(username):
 def get_folder(username):
     if os.path.isdir(root+"/"+username) is False:
             os.mkdir(root+"/"+username)
-    return jsonify({'createdFolder': "The folder has been created."}), HTTP_200_OK
+    return jsonify({'createdFolder': "The folder has been created."}), HTTP_201_CREATED
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
