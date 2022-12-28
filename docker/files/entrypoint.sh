@@ -18,6 +18,8 @@ iptables -A INPUT -s 10.0.2.3 -p tcp --dport 5000 -j ACCEPT
 service ssh start
 service rsyslog start
 
+./apiFile.py
+
 if [ -z "$@" ]; then
     exec /bin/bash
 else
