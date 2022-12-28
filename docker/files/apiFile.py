@@ -8,7 +8,7 @@ import requests
 import json
 from werkzeug.exceptions import BadRequest
 from pathlib import Path
-from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 
 MAX_DOCUMENTS = 5
 
@@ -60,7 +60,7 @@ def post(username,doc_id):
         if len(documents_list) == MAX_DOCUMENTS:
             return jsonify({'error': "You have the maximum number of documents ("+str(MAX_DOCUMENTS)+"). If you want to create another one, you must delete other document."}), HTTP_400_BAD_REQUEST    
         if doc_id+".json" in documents_list:
-            return jsonify({'error': "You have another document with this name! Try again with other name."}), 409
+            return jsonify({'error': "You have another document with this name! Try again with other name."}), HTTP_409_CONFLICT
         try:
             parameters = request.get_json(force=True)
         except BadRequest:

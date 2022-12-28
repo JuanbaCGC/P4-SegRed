@@ -8,7 +8,7 @@ import secrets
 from werkzeug.exceptions import BadRequest
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+from http_status_codes import HTTP_200_OK
 
 app = Flask(__name__)
 api = Api(app)
@@ -48,8 +48,8 @@ def getVersion():
 def signup():
     parameters = request.get_json(force=True)
     headers = request.headers.get('Authorization')
-    respuesta = requests.post('http://10.0.2.3:5000/signup', json=parameters, headers=headers)
-    return respuesta.json()
+    response = requests.post('http://10.0.2.3:5000/signup', json=parameters, headers=headers)
+    return response.json(), response.status_code
 
 #/LOGIN
 @app.route('/login', methods=['POST'])
@@ -57,47 +57,47 @@ def signup():
 def login():
     parameters = request.get_json(force=True)
     headers = request.headers.get('Authorization')
-    respuesta = requests.post('http://10.0.2.3:5000/login', json=parameters, headers=headers)
-    return respuesta.json()
+    response = requests.post('http://10.0.2.3:5000/login', json=parameters, headers=headers)
+    return response.json(), response.status_code
 
 #GET DOCUMENT
 #/<string:username>/<string:doc_id>
 @app.route('/<string:username>/<string:doc_id>', methods=['GET'])
 def get(username, doc_id):
     headers = {"Authorization":request.headers.get('Authorization')}
-    respuesta = requests.get(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
-    return respuesta.json()
+    response = requests.get(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
+    return response.json(), response.status_code
 
 #POST DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['POST'])
 def post(username,doc_id):
     parameters = request.get_json(force=True)
     headers = {"Authorization": request.headers.get('Authorization')}
-    respuesta = requests.post(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
-    return respuesta.json()
+    response = requests.post(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+    return response.json(), response.status_code
 
 #PUT DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['PUT'])
 def put(username, doc_id):
     parameters = request.get_json(force=True)
     headers = {"Authorization": request.headers.get('Authorization')}
-    respuesta = requests.put(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
-    return respuesta.json()
+    response = requests.put(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+    return response.json(), response.status_code
 
 #DELETE DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['DELETE'])
 def delete(username, doc_id):
     headers = {"Authorization":request.headers.get('Authorization')}
-    respuesta = requests.delete(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
-    return respuesta.json()
+    response = requests.delete(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
+    return response.json(), response.status_code
 
 #GET ALL DOCS
 #/<string:username>/_all_docs
 @app.route('/<string:username>/_all_docs' , methods=['GET'])
 def get_all_docs(username):
     headers = {"Authorization":request.headers.get('Authorization')}
-    respuesta = requests.get(f'http://10.0.2.4:5000/{username}/_all_docs', headers=headers)
-    return respuesta.json()
+    response = requests.get(f'http://10.0.2.4:5000/{username}/_all_docs', headers=headers)
+    return response.json(), response.status_code
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

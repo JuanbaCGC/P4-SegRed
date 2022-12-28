@@ -2,8 +2,8 @@
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-iptables -P INPUT DROP
-iptables -P FORWARD DROP
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 
 iptables -A INPUT -i lo -j ACCEPT
