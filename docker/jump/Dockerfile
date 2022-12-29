@@ -8,4 +8,4 @@ RUN chown jump:jump -R /home/jump
 
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+ENTRYPOINT ["bash", "entrypoint.sh"]
