@@ -10,4 +10,4 @@ RUN pip install requests
 
 COPY entrypoint.sh /entrypoint.sh
 COPY test.py /test.py
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["bash", "entrypoint.sh"]
