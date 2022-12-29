@@ -12,4 +12,4 @@ COPY entrypoint.sh /entrypoint.sh
 COPY apiFile.py /apiFile.py
 COPY http_status_codes.py /http_status_codes.py
 
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["bash", "entrypoint.sh"]
