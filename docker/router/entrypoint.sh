@@ -31,6 +31,11 @@ iptables -A FORWARD -i eth3 -o eth1 -p tcp --sport 5000 -j ACCEPT
 iptables -A FORWARD -i eth3 -o eth1 -p tcp --dport 5000 -j ACCEPT
 iptables -A FORWARD -i eth1 -o eth3 -p tcp --sport 5000 -j ACCEPT
 
+iptables -A FORWARD -i eth1 -o eth0 -p tcp --dport 5000 -j ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp --sport 5000 -j ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 5000 -j ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p tcp --sport 5000 -j ACCEPT
+
 iptables -A INPUT -p tcp --dport 22 -i eth2 -s 10.0.3.3 -j ACCEPT
 
 # Aceptar http del broker

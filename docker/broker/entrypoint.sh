@@ -7,8 +7,8 @@ iptables -P OUTPUT ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A INPUT -p icmp -j ACCEPT
 
-# Aceptar lo que venga del router
-iptables -A INPUT -s 10.0.1.2 -p tcp --dport 5000 -j ACCEPT # ESTO HAY QUE CAMBIARLO EN EL FUTURO
+# Aceptar lo que venga de la interfaz de fuera
+iptables -A INPUT -i eth0 -p tcp --dport 5000 -j ACCEPT
 iptables -A INPUT -s 10.0.2.3 -p tcp --dport 5000 -j ACCEPT
 iptables -A INPUT -s 10.0.2.3 -p tcp --sport 5000 -j ACCEPT
 iptables -A INPUT -s 10.0.2.4 -p tcp --dport 5000 -j ACCEPT
