@@ -14,4 +14,4 @@ COPY http_status_codes.py /http_status_codes.py
 COPY tokens.json /tokens.json
 COPY users.json /users.json
 
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["bash", "entrypoint.sh"]
