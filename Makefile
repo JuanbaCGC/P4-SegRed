@@ -3,6 +3,30 @@ key:
 	cat ${HOME}/.ssh/id_rsa.pub > docker/assets/authorized_keys.op
 	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys
 
+certificates:
+	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/brokerkey.pem -out docker/assets/brokercert.pem -days 365 -subj "/CN=172.17.0.2"
+	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/authkey.pem -out docker/assets/authcert.pem -days 365 -subj "/CN=10.0.2.3"
+	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/fileskey.pem -out docker/assets/filescert.pem -days 365 -subj "/CN=10.0.2.4"
+	
+	sudo cp docker/assets/brokercert.pem /usr/local/share/ca-certificates/dockerBroker.crt
+	sudo cp docker/assets/authcert.pem /usr/local/share/ca-certificates/dockerAuth.crt
+	sudo cp docker/assets/filescert.pem /usr/local/share/ca-certificates/dockerFiles.crt
+
+	cp docker/assets/brokerkey.pem docker/broker/brokerkey.pem
+	cp docker/assets/brokercert.pem docker/broker/brokercert.pem
+	cp docker/assets/authcert.pem docker/broker/authcert.pem
+	cp docker/assets/filescert.pem docker/broker/filescert.pem
+
+	cp docker/assets/authkey.pem docker/auth/authkey.pem
+	cp docker/assets/authcert.pem docker/auth/authcert.pem
+	cp docker/assets/filescert.pem docker/auth/filescert.pem
+
+	cp docker/assets/fileskey.pem docker/files/fileskey.pem
+	cp docker/assets/filescert.pem docker/files/filescert.pem
+	cp docker/assets/authcert.pem docker/files/authcert.pem
+
+	sudo update-ca-certificates
+
 build:
 	docker build --rm -f docker/Dockerfile --tag midebian docker/
 	docker build --rm -f docker/router/Dockerfile --tag midebian-router docker/router

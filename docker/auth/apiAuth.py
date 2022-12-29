@@ -17,11 +17,6 @@ from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUES
 app = Flask(__name__)
 api = Api(app)
 root = str(Path.home())+"/Server"
-limiter = Limiter(
-        app,
-        key_func=get_remote_address,
-        default_limits=["30 per minute"]
-    )
 
 UserList=[]
 
@@ -100,15 +95,6 @@ def matchHashedText(hashedPass, providedPass):
 def clearTokens():
     write('tokens.json', [])
 
-# Method to get the identification of the user in order to count her requests
-def getUsername():
-    try:
-        name = str(request.get_json(force=True)['username'])
-    except KeyError:
-        return str(secrets.token_urlsafe(20))
-    except BadRequest:
-        return str(secrets.token_urlsafe(20))
-    return name
 
 # Method that validate the password
 def validPass(password):
@@ -135,7 +121,6 @@ def validPass(password):
 
 #/SIGNUP
 @app.route('/signup', methods=['POST'])
-@limiter.limit("30 per minute", key_func = lambda : getUsername())
 def signup():
     try:
         parameters = request.get_json(force=True)
@@ -162,12 +147,11 @@ def signup():
         write('users.json', data)
         token = secrets.token_urlsafe(20)
         writeToken(token,request.json['username'])
-        requests.get(f'http://10.0.2.4:5000/{name}/get_folder')
+        requests.get(f'https://10.0.2.4:5000/{name}/get_folder')
         return jsonify({"access_token": token}), HTTP_201_CREATED
 
 #/LOGIN
 @app.route('/login', methods=['POST'])
-@limiter.limit("30 per minute", key_func = lambda : getUsername())
 def login():
     try:
         parameters = request.get_json(force=True)
@@ -189,5 +173,5 @@ def get_verify(username):
         return verifyHeader(username)
         
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", debug=True, ssl_context=("authcert.pem","authkey.pem"), port=5000)
     app.teardown_appcontext(clearTokens())
