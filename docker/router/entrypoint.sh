@@ -2,8 +2,8 @@
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-iptables -P INPUT ACCEPT
-iptables -P FORWARD ACCEPT
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
 iptables -P OUTPUT ACCEPT
 
 iptables -A INPUT -i lo -j ACCEPT
@@ -31,20 +31,15 @@ iptables -A FORWARD -i eth3 -o eth1 -p tcp --sport 5000 -j ACCEPT
 iptables -A FORWARD -i eth3 -o eth1 -p tcp --dport 5000 -j ACCEPT
 iptables -A FORWARD -i eth1 -o eth3 -p tcp --sport 5000 -j ACCEPT
 
+iptables -A FORWARD -i eth1 -o eth0 -p tcp --dport 5000 -j ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp --sport 5000 -j ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 5000 -j ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p tcp --sport 5000 -j ACCEPT
+
 iptables -A INPUT -p tcp --dport 22 -i eth2 -s 10.0.3.3 -j ACCEPT
-
-# Aceptar http del broker
-iptables -A INPUT -p tcp --sport 5000 -s 10.0.1.4 -j ACCEPT
-
-iptables -A INPUT -p tcp --sport 5000 -s 10.0.2.3 -j ACCEPT
-#pruebas ssh
-#iptables -A INPUT -p icmp --dport 22 -s 10.0.3.3 -j ACCEPT
-#iptables -A INPUT -p icmp --sport 22 -s 10.0.3.0/24 -j ACCEPT
 
 service ssh start
 service rsyslog start
-
-
 
 if [ -z "$@" ]; then
     exec /bin/bash

@@ -11,13 +11,13 @@ iptables -A INPUT -p tcp --dport 22 -s 10.0.1.3 -j ACCEPT
 iptables -A INPUT -p tcp --sport 22 -s 10.0.1.0/24 -j ACCEPT
 
 ip route del default
-ip route add default via 10.0.3.2 dev eth0
+ip route add default via 10.0.3.2 dev eth0 
 
 service ssh start
 service rsyslog start
-iptables -A INPUT -p icmp --sport 22 -s 10.0.1.3 -j ACCEPT #permitir conexion entrante de jump
-iptables -A INPUT -p icmp --dport 22 -j ACCEPT #permitir ir a cualquier nodo
 
+iptables -A INPUT -p icmp --sport 22 -s 10.0.1.3 -j ACCEPT
+iptables -A INPUT -p icmp --dport 22 -j ACCEPT
 
 if [ -z "$@" ]; then
     exec /bin/bash
