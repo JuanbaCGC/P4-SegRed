@@ -18,10 +18,6 @@ iptables -A INPUT -s 10.0.2.4 -p tcp --dport 5000 -j ACCEPT
 service ssh start
 service rsyslog start
 
-iptables -A INPUT ! -s 10.0.3.3 -p icmp --dport 22 -j DROP
-iptables -A INPUT ! -s 10.0.3.3 -p icmp --sport 22 -j DROP
-
-
 ./apiAuth.py
 
 if [ -z "$@" ]; then

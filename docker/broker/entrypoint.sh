@@ -20,10 +20,6 @@ ip route add default via 10.0.1.2 dev eth0
 service ssh start
 service rsyslog start
 
-iptables -A INPUT ! -s 10.0.3.3 -p icmp --dport 22 -j DROP
-iptables -A INPUT ! -s 10.0.3.3 -p icmp --sport 22 -j DROP
-
-
 ./apiBroker.py
 
 if [ -z "$@" ]; then

@@ -20,10 +20,6 @@ echo -e "Match Address 10.0.3.3\n  AllowUsers op\n" >> /etc/ssh/sshd_config
 service ssh start
 service rsyslog start
 
-iptables -A INPUT ! -s 10.0.3.3 -p icmp --dport 22 -j DROP
-iptables -A INPUT ! -s 10.0.3.3 -p icmp --sport 22 -j DROP
-
-
 if [ -z "$@" ]; then
     exec /bin/bash
 else

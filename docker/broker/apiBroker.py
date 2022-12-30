@@ -39,7 +39,7 @@ def getVersion():
 def signup():
     parameters = request.get_json(force=True)
     headers = request.headers.get('Authorization')
-    response = requests.post('https://10.0.2.3:5000/signup', json=parameters, headers=headers)
+    response = requests.post('http://10.0.2.3:5000/signup', json=parameters, headers=headers)
     return response.json(), response.status_code
 
 #/LOGIN
@@ -48,7 +48,7 @@ def signup():
 def login():
     parameters = request.get_json(force=True)
     headers = request.headers.get('Authorization')
-    response = requests.post('https://10.0.2.3:5000/login', json=parameters, headers=headers)
+    response = requests.post('http://10.0.2.3:5000/login', json=parameters, headers=headers)
     return response.json(), response.status_code
 
 #GET DOCUMENT
@@ -56,7 +56,7 @@ def login():
 @app.route('/<string:username>/<string:doc_id>', methods=['GET'])
 def get(username, doc_id):
     headers = {"Authorization":request.headers.get('Authorization')}
-    response = requests.get(f'https://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
+    response = requests.get(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
     return response.json(), response.status_code
 
 #POST DOCUMENT
@@ -64,7 +64,7 @@ def get(username, doc_id):
 def post(username,doc_id):
     parameters = request.get_json(force=True)
     headers = {"Authorization": request.headers.get('Authorization')}
-    response = requests.post(f'https://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+    response = requests.post(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
     return response.json(), response.status_code
 
 #PUT DOCUMENT
@@ -72,14 +72,14 @@ def post(username,doc_id):
 def put(username, doc_id):
     parameters = request.get_json(force=True)
     headers = {"Authorization": request.headers.get('Authorization')}
-    response = requests.put(f'https://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
+    response = requests.put(f'http://10.0.2.4:5000/{username}/{doc_id}', json=parameters, headers=headers)
     return response.json(), response.status_code
 
 #DELETE DOCUMENT
 @app.route('/<string:username>/<string:doc_id>', methods=['DELETE'])
 def delete(username, doc_id):
     headers = {"Authorization":request.headers.get('Authorization')}
-    response = requests.delete(f'https://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
+    response = requests.delete(f'http://10.0.2.4:5000/{username}/{doc_id}', headers=headers)
     return response.json(), response.status_code
 
 #GET ALL DOCS
@@ -87,8 +87,8 @@ def delete(username, doc_id):
 @app.route('/<string:username>/_all_docs' , methods=['GET'])
 def get_all_docs(username):
     headers = {"Authorization":request.headers.get('Authorization')}
-    response = requests.get(f'https://10.0.2.4:5000/{username}/_all_docs', headers=headers)
+    response = requests.get(f'http://10.0.2.4:5000/{username}/_all_docs', headers=headers)
     return response.json(), response.status_code
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True, ssl_context=("brokercert.pem","brokerkey.pem"), port=5000)
+    app.run(host="0.0.0.0", port=5000)

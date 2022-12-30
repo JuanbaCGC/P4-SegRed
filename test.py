@@ -10,7 +10,7 @@ import json
 warnings.filterwarnings("ignore")
 
 #URL = "https://myserver.local:5000"
-URL = "http://10.0.1.4:5000"
+URL = "http://myserver.local:5000"
 USERS = {
     "user1": "12345Pass1.!_",
     "user2": "54321Pass2.!_",

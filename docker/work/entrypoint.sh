@@ -16,9 +16,6 @@ ip route add default via 10.0.3.2 dev eth0
 service ssh start
 service rsyslog start
 
-iptables -A INPUT -p icmp --sport 22 -s 10.0.1.3 -j ACCEPT
-iptables -A INPUT -p icmp --dport 22 -j ACCEPT
-
 if [ -z "$@" ]; then
     exec /bin/bash
 else
