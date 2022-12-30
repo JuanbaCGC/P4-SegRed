@@ -3,8 +3,13 @@ key:
 	cat ${HOME}/.ssh/id_rsa.pub > docker/assets/authorized_keys.op
 	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys
 
+DNS:
+	if ! grep -q "172.17.0.2 myserver.local" /etc/hosts; then \
+		sudo bash -c "echo '172.17.0.2 myserver.local' >> /etc/hosts"; \
+	fi
+
 certificates:
-	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/brokerkey.pem -out docker/assets/brokercert.pem -days 365 -subj "/CN=172.17.0.2"
+	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/brokerkey.pem -out docker/assets/brokercert.pem -days 365 -subj "/CN=myserver.local"
 	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/authkey.pem -out docker/assets/authcert.pem -days 365 -subj "/CN=10.0.2.3"
 	openssl req -x509 -newkey rsa:4096 -nodes -keyout docker/assets/fileskey.pem -out docker/assets/filescert.pem -days 365 -subj "/CN=10.0.2.4"
 	
