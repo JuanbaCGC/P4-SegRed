@@ -29,7 +29,7 @@ def get(username, doc_id):
         return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
 
     # Verificamos la cabecera y el token
-    respuesta = requests.get(f'https://10.0.2.3:5000/{username}/verify', headers=header)
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', headers=header)
     respuesta_json = respuesta.json()
     if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
@@ -53,7 +53,7 @@ def post(username,doc_id):
         return jsonify({'error': "Introduce the Authorization header and the username"}), HTTP_400_BAD_REQUEST
 
     # Verificamos la cabecera y el token
-    respuesta = requests.get(f'https://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
     respuesta_json = respuesta.json()
     if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
@@ -90,7 +90,7 @@ def put(username, doc_id):
         return jsonify({'error': "Introduce the Authorization header and the username"}), HTTP_400_BAD_REQUEST
 
     # Verificamos la cabecera y el token
-    respuesta = requests.get(f'https://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', json=parameters, headers=header)
     respuesta_json = respuesta.json()
     if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
@@ -123,7 +123,7 @@ def delete(username, doc_id):
         return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
 
     # Verificamos la cabecera y el token
-    respuesta = requests.get(f'https://10.0.2.3:5000/{username}/verify', headers=header)
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', headers=header)
     respuesta_json = respuesta.json()
     if 'Correct' in respuesta_json:
         documents_list = os.listdir(root+"/"+username)
@@ -145,7 +145,7 @@ def get_all_docs(username):
         return jsonify({'error': "Introduce the Authorization header and the username."}), HTTP_400_BAD_REQUEST
 
     # Verificamos la cabecera y el token
-    respuesta = requests.get(f'https://10.0.2.3:5000/{username}/verify', headers=header)
+    respuesta = requests.get(f'http://10.0.2.3:5000/{username}/verify', headers=header)
     respuesta_json = respuesta.json()
     if 'Correct' in respuesta_json:
         if os.path.exists(root+"/"+username):
@@ -168,7 +168,7 @@ def get_all_docs(username):
 def get_folder(username):
     if os.path.isdir(root+"/"+username) is False:
             os.mkdir(root+"/"+username)
-    return jsonify({'createdFolder': "The folder has been created."}), HTTP_201_CREATED
+    return jsonify({'createdFolder': "The folder has been created."}), HTTP_200_OK
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True, ssl_context=("filescert.pem","fileskey.pem"), port=5000)
+    app.run(host="0.0.0.0", port=5000)

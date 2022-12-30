@@ -23,7 +23,14 @@ RUN chmod 644 /etc/ssh/sshd_config && \
     useradd -ms /bin/bash op && \
     mkdir /home/op/.ssh && \
     chmod 700 /home/op/.ssh
+RUN chmod 644 /etc/ssh/sshd_config && \
+    chown root:root /etc/ssh/sshd_config && \
+    mkdir /home/dev && \
+    mkdir /home/dev/.ssh && \
+    chmod 700 /home/dev/.ssh
 COPY assets/authorized_keys.op /home/op/.ssh/authorized_keys
+COPY assets/authorized_keys.dev /home/dev/.ssh/authorized_keys
 RUN chown op:op -R /home/op
 
 COPY assets/sudoers.op /etc/sudoers.d/op
+COPY assets/sudoers.dev /etc/sudoers.d/dev
