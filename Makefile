@@ -1,7 +1,7 @@
 key:
 	ssh-keygen -t rsa
-	cat ${HOME}/.ssh/id_rsa.pub > docker/assets/authorized_keys.op
-	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys
+	cat ${HOME}/.ssh/id_rsa.pub >> docker/assets/authorized_keys.op
+	cat ${HOME}/.ssh/id_rsa.pub >> docker/jump/authorized_keys
 
 DNS:
 	if ! grep -q "172.17.0.2 myserver.local" /etc/hosts; then \
