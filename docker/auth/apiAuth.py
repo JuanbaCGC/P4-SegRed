@@ -17,11 +17,6 @@ from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUES
 app = Flask(__name__)
 api = Api(app)
 root = str(Path.home())+"/Server"
-limiter = Limiter(
-        app,
-        key_func=get_remote_address,
-        default_limits=["30 per minute"]
-    )
 
 UserList=[]
 
@@ -135,7 +130,6 @@ def validPass(password):
 
 #/SIGNUP
 @app.route('/signup', methods=['POST'])
-@limiter.limit("30 per minute", key_func = lambda : getUsername())
 def signup():
     try:
         parameters = request.get_json(force=True)
@@ -167,7 +161,6 @@ def signup():
 
 #/LOGIN
 @app.route('/login', methods=['POST'])
-@limiter.limit("30 per minute", key_func = lambda : getUsername())
 def login():
     try:
         parameters = request.get_json(force=True)
