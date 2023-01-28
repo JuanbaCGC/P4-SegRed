@@ -76,7 +76,7 @@ containers:
 	docker run --privileged --rm -ti -d \
 		--name files --hostname files --ip 10.0.2.4 --network srv midebian-files
 
-all: DNS certificates build network containers
+all:DNS certificates build network containers
 
 remove:
 	-docker stop router work jump broker auth files
