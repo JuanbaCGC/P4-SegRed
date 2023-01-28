@@ -5,7 +5,7 @@ import requests
 import os
 import json
 
-#os.environ["REQUESTS_CA_BUNDLE"] = "/etc/ssl/certs"
+os.environ["REQUESTS_CA_BUNDLE"] = "/etc/ssl/certs"
 
 warnings.filterwarnings("ignore")
 
