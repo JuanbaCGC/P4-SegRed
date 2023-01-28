@@ -9,9 +9,7 @@ import hashlib
 import secrets
 import threading
 from werkzeug.exceptions import BadRequest
-from flask_limiter import Limiter
 from pathlib import Path
-from flask_limiter.util import get_remote_address
 from http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 
 app = Flask(__name__)
@@ -156,7 +154,7 @@ def signup():
         write('users.json', data)
         token = secrets.token_urlsafe(20)
         writeToken(token,request.json['username'])
-        requests.get(f'http://10.0.2.4:5000/{name}/get_folder')
+        requests.get(f'https://10.0.2.4:5000/{name}/get_folder',verify='/usr/local/share/ca-certificates/dockerFiles.crt')
         return jsonify({"access_token": token}), HTTP_201_CREATED
 
 #/LOGIN
@@ -182,5 +180,6 @@ def get_verify(username):
         return verifyHeader(username)
         
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    # app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", ssl_context=("authcert.pem", "authkey.pem"), port=5000)
     app.teardown_appcontext(clearTokens())
