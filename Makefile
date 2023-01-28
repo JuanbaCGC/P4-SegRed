@@ -3,6 +3,15 @@ key:
 	cat ${HOME}/.ssh/id_rsa.pub >> docker/assets/authorized_keys.op
 	cat ${HOME}/.ssh/id_rsa.pub >> docker/jump/authorized_keys
 
+	cat ${HOME}/.ssh/id_rsa.pub > docker/assets/authorized_keys.dev
+	cat ${HOME}/.ssh/id_rsa.pub > docker/assets/authorized_keys.dev.pub
+	cat ${HOME}/.ssh/id_rsa.pub > docker/assets/authorized_keys.op.pub
+	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys.dev.pub
+	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys.dev
+	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys.op
+	cat ${HOME}/.ssh/id_rsa.pub > docker/jump/authorized_keys.op.pub
+
+
 DNS:
 	if ! grep -q "172.17.0.2 myserver.local" /etc/hosts; then \
 		sudo bash -c "echo '172.17.0.2 myserver.local' >> /etc/hosts"; \
