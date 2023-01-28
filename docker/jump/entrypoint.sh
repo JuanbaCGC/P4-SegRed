@@ -16,19 +16,12 @@ ip route add default via 10.0.1.2 dev eth0
 
 echo -e "Match Address 10.0.1.2\n  AllowUsers jump\n" >> /etc/ssh/sshd_config
 echo -e "Match Address 10.0.3.3\n  AllowUsers op\n" >> /etc/ssh/sshd_config
-#echo -e "Match Address 10.0.3.3\n  AllowUsers dev\n" >> /etc/ssh/sshd_config
 
 service ssh start
 service rsyslog start
 
 iptables -A INPUT ! -s 10.0.3.3 -p icmp --dport 22 -j DROP
 iptables -A INPUT ! -s 10.0.3.3 -p icmp --sport 22 -j DROP
-
-#iptables -A INPUT --dport 22 -p icmp -s 10.0.1.2 -j ACCEPT
-#iptables -A INPUT --dport 22 -p icmp -s 10.0.3.3 -j ACCEPT
-#iptables -A INPUT --sport 22 -p icmp -s 10.0.3.0/24 -j ACCEPT
-
-
 
 if [ -z "$@" ]; then
     exec /bin/bash
