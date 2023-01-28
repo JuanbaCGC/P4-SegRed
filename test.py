@@ -9,8 +9,7 @@ import json
 
 warnings.filterwarnings("ignore")
 
-#URL = "https://myserver.local:5000"
-URL = "http://myserver.local:5000"
+URL = "https://myserver.local:5000"
 USERS = {
     "user1": "12345Pass1.!_",
     "user2": "54321Pass2.!_",
@@ -151,6 +150,7 @@ def test_delete_docs():
         )
         r = _req(
             f"{u}/doc{u}",
+            method="DELETE",
             token=token,
             check=False
         )
@@ -165,7 +165,7 @@ def main():
         test_login,
         test_create_and_update_doc,
         test_all_docs,
-        test_delete_docs,
+        test_delete_docs
     ]
     for t in tests:
         t()
